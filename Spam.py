@@ -135,21 +135,26 @@ class Spam:
     
     
     def __check_spam(self, cached_messages) -> bool:
+        """Check for spam patterns in the given list of messages."""
+        if len(cached_messages) < self.__last_messages:
+            return False
+
         similarity_scores = []
-        for message in cached_messages[-self.__last_mesages:]:
-            similarity_score = self.__average_similarity(message['message'], [msg['message'] for msg in cached_messages[-self.__last_mesages:]])
+        for message in cached_messages[-self.__last_messages:]:
+            similarity_score = self.__average_similarity(message['message'], [msg['message'] for msg in cached_messages[-self.__last_messages:]])
             similarity_scores.append(similarity_score)
 
         if max(similarity_scores) >= self.__similarity_score:
             last_similar_message_time = None
-            for msg in reversed(cached_messages):
+            for msg in reversed(cached_messages[-self.__last_messages:]):
                 if msg['message'] == cached_messages[-1]['message']:
                     last_similar_message_time = msg['timestamp']
                     break
 
             if last_similar_message_time is not None:
                 time_difference = time.time() - last_similar_message_time
-                if time_difference <= self.__spam_treshold_time:
+                if time_difference <= self.__spam_threshold_time:
+                    print("Potential spam detected:", cached_messages[-1]['message'])
                     return True
 
         return False
