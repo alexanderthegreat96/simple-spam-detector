@@ -17,7 +17,8 @@ message_cache = {
     ]
 }
 
-spam = Spam(message_cache)
+spam = Spam()
+spam.set_messages(message_cache)
 
 while True:
     message = input("Type your message here: ")

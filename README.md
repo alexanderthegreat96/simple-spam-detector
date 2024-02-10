@@ -20,7 +20,6 @@ By continuously analyzing incoming messages in real-time, the Spam class can hel
 
 ## Parameters
 
-- `messages`: Dictionary containing messages to be analyzed.
 - `last_messages`: Number of last messages to consider for spam analysis.
 - `message_interval`: Minimum time interval between consecutive messages.
 - `spam_threshold_time`: Timeframe to consider similar messages as spam (in seconds).
@@ -29,6 +28,7 @@ By continuously analyzing incoming messages in real-time, the Spam class can hel
 
 ## Methods
 
+- `set_messages()`: Provide the message cache dictionary
 - `analyze()`: Perform spam analysis on provided messages.
 
 ## Additional Usage Examples
@@ -62,7 +62,6 @@ import time
 import sys
 from Spam import Spam
 
-# Sample message cache
 message_cache = {
     "messages": [
          {
@@ -78,11 +77,10 @@ message_cache = {
     ]
 }
 
-# Initialize Spam object with the message cache
-spam_checker = Spam(message_cache)
+spam = Spam()
+spam.set_messages(message_cache)
 
 while True:
-    # Input message from user
     message = input("Type your message here: ")
     
     if message.lower() == "exit":
@@ -98,9 +96,8 @@ while True:
     message_cache["messages"].append(new_message)
     print("Message added to cache.")
     
-    # Analyze the message for spam
-    result = spam_checker.analyze()
-    print(result)
+    analyze = spam.analyze()
+    print(analyze)
     sys.stdout.flush()
 
 print("Final message cache:")
